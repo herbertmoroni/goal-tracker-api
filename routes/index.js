@@ -37,6 +37,9 @@ router.get('/health', (req, res) => {
   });
 });
 
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('../docs/swagger');
+
 // Register routes
 router.use('/auth', require('./authRoutes'));
 router.use('/goals', require('./goalRoutes'));

@@ -244,15 +244,13 @@
 
 const express = require('express');
 const router = express.Router();
-
-
-router.use(authenticate);
+const goalController = require('../controllers/goalController');
 
 router.get('/', goalController.getAllGoals);
-router.post('/', validateGoal, goalController.createGoal);
+router.post('/',  goalController.createGoal);
 router.get('/:id', goalController.getGoalById);
-router.put('/:id', validateGoal, goalController.updateGoal);
+router.put('/:id',  goalController.updateGoal);
 router.delete('/:id', goalController.deleteGoal);
-router.patch('/reorder', validateGoalReorder, goalController.reorderGoals);
+router.patch('/reorder',  goalController.reorderGoals);
 
 module.exports = router;
