@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+
 /**
  * @swagger
  * /health:
@@ -37,14 +38,10 @@ router.get('/health', (req, res) => {
   });
 });
 
-const swaggerUi = require('swagger-ui-express');
-const swaggerSpec = require('../docs/swagger');
-
 // Register routes
 router.use('/auth', require('./authRoutes'));
 router.use('/goals', require('./goalRoutes'));
 router.use('/checks', require('./checkRoutes'));
 router.use('/stats', require('./statsRoutes'));
-router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 module.exports = router;
