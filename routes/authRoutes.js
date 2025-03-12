@@ -3,7 +3,7 @@
  * /auth/register:
  *   post:
  *     summary: Register a new user
- *     tags: [Authentication]
+ *     tags: [Users]
  *     security: []
  *     requestBody:
  *       required: true
@@ -40,7 +40,7 @@
  * /auth/user:
  *   get:
  *     summary: Get current user information
- *     tags: [Authentication]
+ *     tags: [Users]
  *     responses:
  *       200:
  *         description: User information retrieved successfully
