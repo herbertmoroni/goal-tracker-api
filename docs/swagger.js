@@ -13,6 +13,13 @@ const options = {
     servers: [
       { url: 'http://localhost:3000/api', description: 'Development server' }
     ],
+    tags: [
+      { name: 'Users', description: 'User operations' },
+      { name: 'Goals', description: 'Goal management operations' },
+      { name: 'Checks', description: 'Goal completion checks' },
+      { name: 'Stats', description: 'Statistics and reporting' },
+      { name: 'System', description: 'System operations' }
+    ],
     components: {
       securitySchemes: {
         bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }
