@@ -11,8 +11,7 @@ const options = {
       description: 'A RESTful API for tracking personal goals and habits'
     },
     servers: [
-      { url: 'http://localhost:3000/api', description: 'Development server' },
-      { url: 'https://goal-tracker-api-1mgp.onrender.com/api', description: 'Production server' },
+      {  url: process.env.NODE_ENV === 'development' ? 'http://localhost:3000/api' : 'https://goal-tracker-api-1mgp.onrender.com/api' }
     ],
     tags: [
       { name: 'Users', description: 'User operations' },
