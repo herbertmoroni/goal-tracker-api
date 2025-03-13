@@ -11,7 +11,8 @@ const options = {
       description: 'A RESTful API for tracking personal goals and habits'
     },
     servers: [
-      { url: 'http://localhost:3000/api', description: 'Development server' }
+      { url: 'http://localhost:3000/api', description: 'Development server' },
+      { url: 'https://goal-tracker-api-1mgp.onrender.com/api', description: 'Production server' },
     ],
     tags: [
       { name: 'Users', description: 'User operations' },
@@ -22,7 +23,7 @@ const options = {
     ],
     components: {
       securitySchemes: {
-        bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }
+        bearerAuth: []
       }
     },
     security: [{ bearerAuth: [] }]
