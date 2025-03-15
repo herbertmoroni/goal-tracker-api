@@ -51,7 +51,7 @@ const options = {
           properties: {
             id: { type: 'string', example: '5f8d0f55e3a9d93f9810c9a1' },
             firebaseUid: { type: 'string', example: 'firebase123' },
-            displayName: { type: 'string', example: 'John Doe' },
+            displayName: { type: 'string', example: 'Chuck Norris' },
             email: { type: 'string', format: 'email', example: 'user@example.com' },
             createdAt: { type: 'string', format: 'date-time' },
             lastLogin: { type: 'string', format: 'date-time' }
@@ -63,7 +63,7 @@ const options = {
           properties: {
             email: { type: 'string', format: 'email', example: 'user@example.com' },
             password: { type: 'string', format: 'password', example: 'StrongPassword123!' },
-            displayName: { type: 'string', example: 'John Doe' }
+            displayName: { type: 'string', example: 'Chuck Norris' }
           }
         },
         UserResponse: {
