@@ -4,7 +4,7 @@
   "description": "A RESTful API for tracking personal goals and habits, built with Express.js and MongoDB.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node --no-deprecation server.js"
   },
   "keywords": [],
   "author": "",
