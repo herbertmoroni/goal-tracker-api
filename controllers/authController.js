@@ -133,7 +133,7 @@ class AuthController {
           // Instructions for Swagger testing
           tokenType: 'Bearer',
           token: customToken,
-          usage: 'Add this token to the Authorize button in Swagger with prefix "Bearer "',
+          usage: 'Add this token to the Authorize button in Swagger',
           data: {
             user: {
               id: user._id,
