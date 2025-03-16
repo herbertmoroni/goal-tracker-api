@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 
 // Load environment variables
 dotenv.config();
+const PORT = process.env.PORT || 3000;
 
 // Common response schemas to reduce repetition
 const responses = {
@@ -35,7 +36,7 @@ const options = {
       description: 'A RESTful API for tracking personal goals and habits'
     },
     servers: [
-      { url: process.env.NODE_ENV === 'development' ? 'http://localhost:3000/api' : 'https://goal-tracker-api-1mgp.onrender.com/api' }
+      { url: process.env.NODE_ENV === 'development' ? `http://localhost:${PORT}/api` : 'https://goal-tracker-api-1mgp.onrender.com/api' }
     ],
     tags: [
       { name: 'Users', description: 'User operations' },
