@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const goalController = require('../controllers/goalController');
+const { authenticate } = require('../middleware/authMiddleware');
+
+// Apply authentication to all check routes
+router.use(authenticate);
 
 router.get('/', goalController.getAllGoals);
 router.post('/',  goalController.createGoal);

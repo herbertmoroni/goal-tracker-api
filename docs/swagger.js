@@ -47,6 +47,30 @@ const options = {
     ],
     components: {
       schemas: {
+        LoginInput: {
+          type: 'object',
+          required: ['email', 'password'],
+          properties: {
+            email: { type: 'string', format: 'email', example: 'user@example.com' },
+            password: { type: 'string', format: 'password', example: 'StrongPassword123!' }
+          }
+        },
+        LoginResponse: {
+          type: 'object',
+          properties: {
+            status: { type: 'string', example: 'success' },
+            message: { type: 'string', example: 'Login successful' },
+            tokenType: { type: 'string', example: 'Bearer' },
+            token: { type: 'string', example: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...' },
+            usage: { type: 'string', example: 'Add this token to the Authorize button in Swagger' },
+            data: {
+              type: 'object',
+              properties: {
+                user: { $ref: '#/components/schemas/User' }
+              }
+            }
+          }
+        },
         User: {
           type: 'object',
           properties: {
@@ -274,6 +298,26 @@ const options = {
     security: [{ bearerAuth: [] }],
     paths: {
       // Auth Routes
+      '/auth/login': {
+        post: {
+          summary: 'Login user (for testing with Swagger)',
+          tags: ['Users'],
+          security: [],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/LoginInput' }
+              }
+            }
+          },
+          responses: {
+            200: responses.success({ $ref: '#/components/schemas/LoginResponse' }),
+            400: responses.error('Invalid input'),
+            401: responses.error('Invalid credentials')
+          }
+        }
+      },
       '/auth/register': {
         post: {
           summary: 'Register a new user',

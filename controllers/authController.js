@@ -55,23 +55,18 @@ class AuthController {
     
   async getCurrentUser(req, res) {
     try {
-      // For testing - return dummy user
-      const dummyUser = {
-        _id: "5f8d0f55e3a9d93f9810c9a1",
-        firebaseUid: "dummy-firebase-uid-123",
-        email: "chuck.norris@example.com",
-        displayName: "Chuck Norris",
-        createdAt: new Date(),
-        lastLogin: new Date()
-      };
+      // req.user is set by authenticate middleware
+      const user = req.user;
       
       res.status(200).json({
         status: 'success',
         data: {
           user: {
-            id: dummyUser._id,
-            email: dummyUser.email,
-            displayName: dummyUser.displayName
+            id: user._id,
+            email: user.email,
+            displayName: user.displayName,
+            createdAt: user.createdAt,
+            lastLogin: user.lastLogin
           }
         }
       });
@@ -79,6 +74,84 @@ class AuthController {
       res.status(500).json({ 
         status: 'error',
         message: error.message 
+      });
+    }
+  }
+
+
+  /**
+   * Server-side login for testing with Swagger
+   * Provides a Firebase ID token that can be used with the API
+   */
+  async login(req, res) {
+    try {
+      const { email, password } = req.body;
+      
+      if (!email || !password) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'Please provide email and password'
+        });
+      }
+      
+      // Note: Firebase Admin SDK doesn't support email/password authentication directly
+      // For testing purposes, we'll use an alternative approach:
+      // 1. Find the user by email in our database
+      // 2. Generate a custom token
+      // 3. Exchange that for an ID token (simulating what the Firebase client SDK would do)
+      
+      try {
+        // Get the user by email from Firebase
+        const userRecord = await admin.auth().getUserByEmail(email);
+        
+        // Get user from MongoDB
+        const user = await User.findOne({ firebaseUid: userRecord.uid });
+        
+        if (!user) {
+          return res.status(404).json({
+            status: 'error',
+            message: 'User not found in database'
+          });
+        }
+        
+        // Generate a custom token - this would normally be exchanged for an ID token
+        // by the Firebase client SDK
+        const customToken = await admin.auth().createCustomToken(userRecord.uid);
+        
+        // For testing purposes, we're treating this custom token as if it were an ID token
+        // In a real scenario with a frontend, Firebase SDK would exchange this for an ID token
+        
+        // Update last login
+        await User.findOneAndUpdate(
+          { firebaseUid: userRecord.uid },
+          { lastLogin: new Date() }
+        );
+        
+        res.status(200).json({
+          status: 'success',
+          message: 'Login successful',
+          // Instructions for Swagger testing
+          tokenType: 'Bearer',
+          token: customToken,
+          usage: 'Add this token to the Authorize button in Swagger with prefix "Bearer "',
+          data: {
+            user: {
+              id: user._id,
+              email: user.email,
+              displayName: user.displayName
+            }
+          }
+        });
+      } catch (error) {
+        return res.status(401).json({
+          status: 'error',
+          message: 'Invalid credentials'
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        status: 'error',
+        message: error.message
       });
     }
   }
