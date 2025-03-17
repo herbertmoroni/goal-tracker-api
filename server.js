@@ -4,6 +4,8 @@ const dotenv = require('dotenv');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocs = require('./docs/swagger');
 const admin = require('firebase-admin');
+const AppError = require('./utils/AppError');
+const errorHandler = require('./middleware/errorHandler');
 
 // Load environment variables
 dotenv.config();
@@ -16,8 +18,6 @@ admin.initializeApp({
     privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n')
   })
 });
-
-
 
 // Initialize express app
 const app = express();
@@ -43,6 +43,14 @@ app.use('/api-docs', swaggerUi.serve, swaggerDocs.setup);
 app.get('/', (req, res) => {
   res.redirect('/api-docs');
 });
+
+// Handle 404 routes
+app.all('*', (req, res, next) => {
+  next(new AppError(`Route ${req.originalUrl} not found`, 404));
+});
+
+// Global error handler
+app.use(errorHandler);
 
 // Start server
 app.listen(PORT, () => {
