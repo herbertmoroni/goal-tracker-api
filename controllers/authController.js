@@ -1,17 +1,15 @@
 const admin = require('firebase-admin');
 const User = require('../models/userModel');
+const AppError = require('../utils/AppError');
 
 class AuthController {
   
-  async register(req, res) {
+  async register(req, res, next) {
     try {
       const { email, password, displayName } = req.body;
       
       if (!email || !password || !displayName) {
-        return res.status(400).json({ 
-          status: 'error',
-          message: 'Please provide email, password and displayName' 
-        });
+        return next(new AppError('Please provide email, password and displayName', 400));
       }
       
       // Create user in Firebase (handles password hashing)
@@ -45,18 +43,19 @@ class AuthController {
         }
       });
     } catch (error) {
-      res.status(500).json({ 
-        status: 'error',
-        message: error.message 
-      });
+      return next(new AppError(error.message, 500));
     }
   }
 
     
-  async getCurrentUser(req, res) {
+  async getCurrentUser(req, res, next) {
     try {
       // req.user is set by authenticate middleware
       const user = req.user;
+      
+      if (!user) {
+        return next(new AppError('User not found', 404));
+      }
       
       res.status(200).json({
         status: 'success',
@@ -71,10 +70,7 @@ class AuthController {
         }
       });
     } catch (error) {
-      res.status(500).json({ 
-        status: 'error',
-        message: error.message 
-      });
+      return next(new AppError(error.message, 500));
     }
   }
 
@@ -83,15 +79,12 @@ class AuthController {
    * Server-side login for testing with Swagger
    * Provides a Firebase ID token that can be used with the API
    */
-  async login(req, res) {
+  async login(req, res, next) {
     try {
       const { email, password } = req.body;
       
       if (!email || !password) {
-        return res.status(400).json({
-          status: 'error',
-          message: 'Please provide email and password'
-        });
+        return next(new AppError('Please provide email and password', 400));
       }
       
       // Note: Firebase Admin SDK doesn't support email/password authentication directly
@@ -108,10 +101,7 @@ class AuthController {
         const user = await User.findOne({ firebaseUid: userRecord.uid });
         
         if (!user) {
-          return res.status(404).json({
-            status: 'error',
-            message: 'User not found in database'
-          });
+          return next(new AppError('User not found in database', 404));
         }
         
         // Generate a custom token - this would normally be exchanged for an ID token
@@ -143,19 +133,12 @@ class AuthController {
           }
         });
       } catch (error) {
-        return res.status(401).json({
-          status: 'error',
-          message: 'Invalid credentials'
-        });
+        return next(new AppError('Invalid credentials', 401));
       }
     } catch (error) {
-      res.status(500).json({
-        status: 'error',
-        message: error.message
-      });
+      return next(new AppError(error.message, 500));
     }
   }
-  
   
 }
 
