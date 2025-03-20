@@ -4,7 +4,8 @@
   "description": "A RESTful API for tracking personal goals and habits, built with Express.js and MongoDB.",
   "main": "server.js",
   "scripts": {
-    "start": "node --no-deprecation server.js"
+    "start": "node --no-deprecation server.js",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -18,5 +19,8 @@
     "mongoose": "^8.10.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }
