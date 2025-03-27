@@ -43,29 +43,6 @@ const validateCheck = {
         .optional()
         .isMongoId()
         .withMessage('Invalid goal ID format')
-    ],
-  
-    getByDateRange: [
-      query('startDate')
-        .notEmpty()
-        .withMessage('Start date is required')
-        .isISO8601()
-        .withMessage('Start date must be in ISO format (YYYY-MM-DD)')
-        .toDate(),
-      
-      query('endDate')
-        .notEmpty()
-        .withMessage('End date is required')
-        .isISO8601()
-        .withMessage('End date must be in ISO format (YYYY-MM-DD)')
-        .toDate()
-        .custom((endDate, { req }) => {
-          const startDate = req.query.startDate;
-          if (endDate < startDate) {
-            throw new Error('End date must be after start date');
-          }
-          return true;
-        })
     ]
   };
 

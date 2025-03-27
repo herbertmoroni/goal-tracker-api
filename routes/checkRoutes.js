@@ -7,7 +7,7 @@ const { validateCheck, handleValidationErrors } = require('../middleware/validat
 // Apply authentication to all check routes
 router.use(authenticate);
 
-router.get('/week', validateCheck.getByDateRange, handleValidationErrors, checkController.getWeekChecks);
+router.get('/week', checkController.getWeekChecks);
 router.post('/:goalId/:date', validateCheck.toggleCheck, handleValidationErrors, checkController.toggleCheck);
 router.get('/date/:date', validateCheck.getByDate, handleValidationErrors, checkController.getChecksByDate);
 
