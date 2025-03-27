@@ -1,56 +1,91 @@
+const goalService = require('../services/goalService');
+const AppError = require('../utils/AppError');
+
 class GoalController {
-  getAllGoals(req, res) {
-    // Implementation code goes here - fetch all goals for the current user
-    
-    res.status(501).json({ 
-      status: 'error',
-      message: 'Not implemented' 
-    });
+  async getAllGoals(req, res, next) {
+    try {
+      const goals = await goalService.getAllActiveGoals(req.user._id);
+      
+      res.status(200).json({
+        status: 'success',
+        data: {
+          goals
+        }
+      });
+    } catch (error) {
+      return next(error);
+    }
   }
 
-  createGoal(req, res) {
-    // Implementation code goes here - create a new goal
-    
-    res.status(501).json({ 
-      status: 'error',
-      message: 'Not implemented' 
-    });
+  async createGoal(req, res, next) {
+    try {
+      const goal = await goalService.createGoal(req.user._id, req.body);
+      
+      res.status(201).json({
+        status: 'success',
+        data: {
+          goal
+        }
+      });
+    } catch (error) {
+      return next(error);
+    }
   }
 
-  getGoalById(req, res) {
-    // Implementation code goes here - fetch a specific goal by ID
-    
-    res.status(501).json({ 
-      status: 'error',
-      message: 'Not implemented' 
-    });
+  async getGoalById(req, res, next) {
+    try {
+      const goal = await goalService.getGoalById(req.params.id, req.user._id);
+      
+      res.status(200).json({
+        status: 'success',
+        data: {
+          goal
+        }
+      });
+    } catch (error) {
+      return next(error);
+    }
   }
 
-  updateGoal(req, res) {
-    // Implementation code goes here - update an existing goal
-    
-    res.status(501).json({ 
-      status: 'error',
-      message: 'Not implemented' 
-    });
+  async updateGoal(req, res, next) {
+    try {
+      const goal = await goalService.updateGoal(req.params.id, req.user._id, req.body);
+      
+      res.status(200).json({
+        status: 'success',
+        data: {
+          goal
+        }
+      });
+    } catch (error) {
+      return next(error);
+    }
   }
 
-  deleteGoal(req, res) {
-    // Implementation code goes here - delete a goal
-    
-    res.status(501).json({ 
-      status: 'error',
-      message: 'Not implemented' 
-    });
+  async deleteGoal(req, res, next) {
+    try {
+      const result = await goalService.deleteGoal(req.params.id, req.user._id);
+      
+      res.status(200).json({
+        status: 'success',
+        message: result.message
+      });
+    } catch (error) {
+      return next(error);
+    }
   }
 
-  reorderGoals(req, res) {
-    // Implementation code goes here - update display order of goals
-    
-    res.status(501).json({ 
-      status: 'error',
-      message: 'Not implemented' 
-    });
+  async reorderGoals(req, res, next) {
+    try {
+      const result = await goalService.reorderGoals(req.user._id, req.body.goals);
+      
+      res.status(200).json({
+        status: 'success',
+        message: result.message
+      });
+    } catch (error) {
+      return next(error);
+    }
   }
 }
 

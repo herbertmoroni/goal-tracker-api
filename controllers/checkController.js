@@ -1,29 +1,46 @@
+const checkService = require('../services/checkService');
+
 class CheckController {
-  getWeekChecks(req, res) {
-    // Implementation code goes here - fetch checks for the current week
-    
-    res.status(501).json({ 
-      status: 'error',
-      message: 'Not implemented' 
-    });
+  async getWeekChecks(req, res, next) {
+    try {
+      const result = await checkService.getWeekChecks(req.user._id);
+      
+      res.status(200).json({
+        status: 'success',
+        data: result
+      });
+    } catch (error) {
+      return next(error);
+    }
   }
 
-  toggleCheck(req, res) {
-    // Implementation code goes here - toggle completion status for a goal on a specific date
-    
-    res.status(501).json({ 
-      status: 'error',
-      message: 'Not implemented' 
-    });
+  async toggleCheck(req, res, next) {
+    try {
+      const { goalId, date } = req.params;
+      const check = await checkService.toggleCheck(req.user._id, goalId, date);
+      
+      res.status(200).json({
+        status: 'success',
+        data: {
+          check
+        }
+      });
+    } catch (error) {
+      return next(error);
+    }
   }
 
-  getChecksByDate(req, res) {
-    // Implementation code goes here - fetch all checks for a specific date
-    
-    res.status(501).json({ 
-      status: 'error',
-      message: 'Not implemented' 
-    });
+  async getChecksByDate(req, res, next) {
+    try {
+      const result = await checkService.getChecksByDate(req.user._id, req.params.date);
+      
+      res.status(200).json({
+        status: 'success',
+        data: result
+      });
+    } catch (error) {
+      return next(error);
+    }
   }
 }
 

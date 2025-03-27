@@ -1,29 +1,44 @@
+const statsService = require('../services/statsService');
+
 class StatsController {
-  getDashboardStats(req, res) {
-    // Implementation code goes here - fetch dashboard statistics
-    
-    res.status(501).json({ 
-      status: 'error',
-      message: 'Not implemented' 
-    });
+  async getDashboardStats(req, res, next) {
+    try {
+      const result = await statsService.getDashboardStats(req.user._id);
+      
+      res.status(200).json({
+        status: 'success',
+        data: result
+      });
+    } catch (error) {
+      return next(error);
+    }
   }
 
-  getStreaks(req, res) {
-    // Implementation code goes here - fetch current and best streaks
-    
-    res.status(501).json({ 
-      status: 'error',
-      message: 'Not implemented' 
-    });
+  async getStreaks(req, res, next) {
+    try {
+      const result = await statsService.getStreaks(req.user._id);
+      
+      res.status(200).json({
+        status: 'success',
+        data: result
+      });
+    } catch (error) {
+      return next(error);
+    }
   }
 
-  getScores(req, res) {
-    // Implementation code goes here - fetch daily and weekly scores
-    
-    res.status(501).json({ 
-      status: 'error',
-      message: 'Not implemented' 
-    });
+  async getScores(req, res, next) {
+    try {
+      const { startDate, endDate } = req.query;
+      const result = await statsService.getScores(req.user._id, startDate, endDate);
+      
+      res.status(200).json({
+        status: 'success',
+        data: result
+      });
+    } catch (error) {
+      return next(error);
+    }
   }
 }
 
