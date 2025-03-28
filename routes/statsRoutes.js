@@ -7,8 +7,8 @@ const { validateStat, handleValidationErrors } = require('../middleware/validati
 // Apply authentication to all check routes
 router.use(authenticate);
 
-router.get('/dashboard', validateStat.getByDateRange, handleValidationErrors, statsController.getDashboardStats);
-router.get('/streaks', validateStat.getByDateRange, handleValidationErrors, statsController.getStreaks);
+router.get('/dashboard', statsController.getDashboardStats);
+router.get('/streaks', statsController.getStreaks);
 router.get('/scores', validateStat.getByDateRange, handleValidationErrors, statsController.getScores);
 
 module.exports = router;

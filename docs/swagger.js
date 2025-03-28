@@ -260,13 +260,22 @@ const options = {
             data: {
               type: 'object',
               properties: {
+                dateRange: {
+                  type: 'object',
+                  properties: {
+                    start: { type: 'string', format: 'date', example: '2023-03-01' },
+                    end: { type: 'string', format: 'date', example: '2023-03-15' }
+                  }
+                },
                 scores: {
                   type: 'array',
                   items: {
                     type: 'object',
                     properties: {
                       date: { type: 'string', format: 'date', example: '2023-03-15' },
-                      value: { type: 'number', example: 85 }
+                      value: { type: 'number', example: 85 },
+                      completedCount: { type: 'number', example: 3 },
+                      totalCount: { type: 'number', example: 5 }
                     }
                   }
                 }
@@ -555,8 +564,32 @@ const options = {
         get: {
           summary: 'Get daily score history',
           tags: ['Stats'],
+          parameters: [
+            {
+              name: 'startDate',
+              in: 'query',
+              required: true,
+              schema: { type: 'string', format: 'date' },
+              description: 'Start date in YYYY-MM-DD format'
+            },
+            {
+              name: 'endDate',
+              in: 'query',
+              required: true,
+              schema: { type: 'string', format: 'date' },
+              description: 'End date in YYYY-MM-DD format'
+            },
+            {
+              name: 'type',
+              in: 'query',
+              required: false,
+              schema: { type: 'string', enum: ['daily', 'streak'] },
+              description: 'Optional stat type filter'
+            }
+          ],
           responses: {
             200: responses.success({ $ref: '#/components/schemas/ScoresResponse' }),
+            400: responses.error('Invalid date parameters'),
             401: responses.error('Unauthorized')
           }
         }
