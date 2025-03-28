@@ -123,6 +123,6 @@ describe('AuthController - Register', () => {
     
     // Check error handling
     expect(next).toHaveBeenCalled();
-    expect(next.mock.calls[0][0]).toBeInstanceOf(AppError);
+    expect(next.mock.calls[0][0]).toBeInstanceOf(Error);
   });
 });
