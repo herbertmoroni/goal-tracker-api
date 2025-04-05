@@ -58,6 +58,42 @@ class AuthController {
       return next(error);
     }
   }
+
+  async updateDisplayName(req, res, next) {
+    try {
+      const { displayName } = req.body;
+      
+      if (!displayName) {
+        return next(new AppError('Please provide a display name', 400));
+      }
+      
+      // Update user in database
+      const user = await authService.updateDisplayName(req.user._id, displayName);
+      
+      res.status(200).json({
+        status: 'success',
+        data: {
+          user
+        }
+      });
+    } catch (error) {
+      return next(error);
+    }
+  }
+  
+  async deleteUser(req, res, next) {
+    try {
+      const result = await authService.deleteUser(req.user._id);
+      
+      res.status(200).json({
+        status: 'success',
+        message: result.message
+      });
+    } catch (error) {
+      return next(error);
+    }
+  }
+
 }
 
 module.exports = new AuthController();

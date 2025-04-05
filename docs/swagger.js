@@ -403,6 +403,45 @@ const options = {
             200: responses.success({ $ref: '#/components/schemas/UserResponse' }),
             401: responses.error('Unauthorized')
           }
+        },
+        put: {
+          summary: 'Update user display name',
+          tags: ['Users'],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  required: ['displayName'],
+                  properties: {
+                    displayName: { type: 'string', example: 'New Display Name' }
+                  }
+                }
+              }
+            }
+          },
+          responses: {
+            200: responses.success({ $ref: '#/components/schemas/UserResponse' }),
+            400: responses.error('Invalid input'),
+            401: responses.error('Unauthorized'),
+            404: responses.error('User not found')
+          }
+        },
+        delete: {
+          summary: 'Delete user account and all associated data',
+          tags: ['Users'],
+          responses: {
+            200: responses.success({
+              type: 'object',
+              properties: {
+                status: { type: 'string', example: 'success' },
+                message: { type: 'string', example: 'User and all associated data deleted successfully' }
+              }
+            }),
+            401: responses.error('Unauthorized'),
+            404: responses.error('User not found')
+          }
         }
       },
       // Categories Routes

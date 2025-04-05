@@ -1,5 +1,9 @@
 const admin = require('firebase-admin');
 const User = require('../models/userModel');
+const Goal = require('../models/goalModel');
+const Check = require('../models/checkModel');
+const Stat = require('../models/statModel');
+const Category = require('../models/categoryModel');
 const AppError = require('../utils/AppError');
 
 class AuthService {
@@ -90,6 +94,67 @@ class AuthService {
       lastLogin: user.lastLogin
     };
   }
+
+  async updateDisplayName(userId, displayName) {
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { displayName },
+      { new: true, runValidators: true }
+    );
+    
+    if (!user) {
+      throw new AppError('User not found', 404);
+    }
+    
+    // Update displayName in Firebase too
+    try {
+      await admin.auth().updateUser(user.firebaseUid, {
+        displayName
+      });
+    } catch (error) {
+      console.error('Error updating Firebase user:', error);
+      // We still continue even if Firebase update fails
+    }
+    
+    return {
+      id: user._id,
+      email: user.email,
+      displayName: user.displayName,
+      createdAt: user.createdAt,
+      lastLogin: user.lastLogin
+    };
+  }
+  
+  async deleteUser(userId) {
+    // Get user from database first to get Firebase UID
+    const user = await User.findById(userId);
+    
+    if (!user) {
+      throw new AppError('User not found', 404);
+    }
+    
+    // Delete all user data (Goals, Checks, Stats, Categories)
+    await Promise.all([
+      Check.deleteMany({ user: userId }),
+      Goal.deleteMany({ user: userId }),
+      Stat.deleteMany({ user: userId }),
+      Category.deleteMany({ user: userId })
+    ]);
+    
+    // Delete user from database
+    await User.findByIdAndDelete(userId);
+    
+    // Delete user from Firebase
+    try {
+      await admin.auth().deleteUser(user.firebaseUid);
+    } catch (error) {
+      console.error('Error deleting Firebase user:', error);
+      // We still continue even if Firebase deletion fails
+    }
+    
+    return { message: 'User and all associated data deleted successfully' };
+  }
+
 }
 
 module.exports = new AuthService();
