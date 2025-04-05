@@ -40,6 +40,7 @@ const options = {
     ],
     tags: [
       { name: 'Users', description: 'User operations' },
+      { name: 'Categories', description: 'Category management operations' },
       { name: 'Goals', description: 'Goal management operations' },
       { name: 'Checks', description: 'Goal completion checks' },
       { name: 'Stats', description: 'Statistics and reporting' },
@@ -99,6 +100,53 @@ const options = {
               type: 'object',
               properties: {
                 user: { $ref: '#/components/schemas/User' }
+              }
+            }
+          }
+        },
+        Category: {
+          type: 'object',
+          properties: {
+            id: { type: 'string', example: '60a1b2c3d4e5f6g7h8i9j0k1' },
+            userId: { type: 'string', example: '5f8d0f55e3a9d93f9810c9a1' },
+            name: { type: 'string', example: 'Physical Health' },
+            color: { type: 'string', example: '#3498db' },
+            order: { type: 'number', example: 1 },
+            createdAt: { type: 'string', format: 'date-time' },
+            updatedAt: { type: 'string', format: 'date-time' }
+          }
+        },
+        CategoryInput: {
+          type: 'object',
+          required: ['name'],
+          properties: {
+            name: { type: 'string', example: 'Physical Health' },
+            color: { type: 'string', example: '#3498db' }
+          }
+        },
+        CategoryResponse: {
+          type: 'object',
+          properties: {
+            status: { type: 'string', example: 'success' },
+            data: {
+              type: 'object',
+              properties: {
+                category: { $ref: '#/components/schemas/Category' }
+              }
+            }
+          }
+        },
+        CategoriesResponse: {
+          type: 'object',
+          properties: {
+            status: { type: 'string', example: 'success' },
+            data: {
+              type: 'object',
+              properties: {
+                categories: {
+                  type: 'array',
+                  items: { $ref: '#/components/schemas/Category' }
+                }
               }
             }
           }
@@ -357,7 +405,88 @@ const options = {
           }
         }
       },
-      
+      // Categories Routes
+      '/categories': {
+        get: {
+          summary: 'Get all categories for the current user',
+          tags: ['Categories'],
+          responses: {
+            200: responses.success({ $ref: '#/components/schemas/CategoriesResponse' }),
+            401: responses.error('Unauthorized')
+          }
+        },
+        post: {
+          summary: 'Create a new category',
+          tags: ['Categories'],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/CategoryInput' }
+              }
+            }
+          },
+          responses: {
+            201: responses.success({ $ref: '#/components/schemas/CategoryResponse' }),
+            400: responses.error('Invalid input'),
+            401: responses.error('Unauthorized')
+          }
+        }
+      },
+      '/categories/{id}': {
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string' },
+            description: 'Category ID'
+          }
+        ],
+        get: {
+          summary: 'Get a specific category by ID',
+          tags: ['Categories'],
+          responses: {
+            200: responses.success({ $ref: '#/components/schemas/CategoryResponse' }),
+            401: responses.error('Unauthorized'),
+            404: responses.error('Category not found')
+          }
+        },
+        put: {
+          summary: 'Update a category',
+          tags: ['Categories'],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/CategoryInput' }
+              }
+            }
+          },
+          responses: {
+            200: responses.success({ $ref: '#/components/schemas/CategoryResponse' }),
+            400: responses.error('Invalid input'),
+            401: responses.error('Unauthorized'),
+            404: responses.error('Category not found')
+          }
+        },
+        delete: {
+          summary: 'Delete a category',
+          tags: ['Categories'],
+          responses: {
+            200: responses.success({
+              type: 'object',
+              properties: {
+                status: { type: 'string', example: 'success' },
+                message: { type: 'string', example: 'Category deleted successfully' },
+                affectedGoals: { type: 'number', example: 3 }
+              }
+            }),
+            401: responses.error('Unauthorized'),
+            404: responses.error('Category not found')
+          }
+        }
+      },
       // Goal Routes
       '/goals': {
         get: {

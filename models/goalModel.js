@@ -7,6 +7,11 @@ const goalSchema = new mongoose.Schema({
     required: true,
     index: true
   },
+  category: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Category',
+    default: null
+  },
   name: {
     type: String,
     required: true,
