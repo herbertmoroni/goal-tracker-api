@@ -3,22 +3,20 @@ const mongoose = require('mongoose');
 const connectDB = async () => {
     try {
         const conn = await mongoose.connect(process.env.MONGODB_URI);
-        console.log(`MongoDB Connected: ${conn.connection.host}`);
 
         // Handle graceful shutdown
         process.on('SIGINT', async () => {
             try {
                 await mongoose.connection.close();
-                console.log('MongoDB connection closed');
                 process.exit(0);
             } catch (error) {
-                console.error('Error closing MongoDB connection:', error);
+                throw new AppError('Error closing MongoDB connection', 500);
                 process.exit(1);
             }
         });
 
     } catch (error) {
-        console.error('Error connecting to MongoDB:', error);
+        throw new AppError('Error connecting to MongoDB', 500);
         process.exit(1);
     }
 };

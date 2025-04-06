@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node --no-deprecation server.js",
-    "test": "jest",
+    "test": "jest --detectOpenHandles",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "lint:src": "eslint --ignore-pattern \"tests/**\" .",

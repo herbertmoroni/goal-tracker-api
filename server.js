@@ -10,6 +10,10 @@ const errorHandler = require('./middleware/errorHandler');
 // Load environment variables
 dotenv.config();
 
+// Initialize express app
+const app = express();
+const PORT = process.env.PORT || 3000;
+
 // Initialize Firebase Admin SDK
 admin.initializeApp({
   credential: admin.credential.cert({
@@ -19,10 +23,6 @@ admin.initializeApp({
   })
 });
 
-// Initialize express app
-const app = express();
-const PORT = process.env.PORT || 3000;
-
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -31,7 +31,6 @@ app.use(express.urlencoded({ extended: true }));
 // Connect to MongoDB
 const connectDB = require('./config/dbConfig');
 connectDB();
-
 
 // API routes with prefix
 app.use('/api', require('./routes'));
@@ -52,12 +51,14 @@ app.all('*', (req, res, next) => {
 // Global error handler
 app.use(errorHandler);
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server running at: `);
-  console.log(`➜ Local: \x1b[34mhttp://localhost:${PORT}\x1b[0m`);
-  console.log(`➜ API Docs: \x1b[34mhttp://localhost:${PORT}/api-docs\x1b[0m`);
-  console.log(`➜ Press \x1b[33mCTRL+C\x1b[0m to stop the server`);
-});
+// Start server only if this file is run directly (not required/imported)
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server running at: `);
+    console.log(`➜ Local: \x1b[34mhttp://localhost:${PORT}\x1b[0m`);
+    console.log(`➜ API Docs: \x1b[34mhttp://localhost:${PORT}/api-docs\x1b[0m`);
+    console.log(`➜ Press \x1b[33mCTRL+C\x1b[0m to stop the server`);
+  });
+}
 
-module.exports = app; // For testing
+module.exports = app; // Export app for testing
