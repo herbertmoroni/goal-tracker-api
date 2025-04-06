@@ -43,6 +43,12 @@ const validateCheck = {
         .optional()
         .isMongoId()
         .withMessage('Invalid goal ID format')
+    ],
+
+    delete: [
+      param('id')
+        .isMongoId()
+        .withMessage('Invalid check ID format')
     ]
   };
 

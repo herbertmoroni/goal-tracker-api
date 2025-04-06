@@ -8,7 +8,8 @@ jest.mock('../../controllers/checkController', () => {
   return {
     getWeekChecks: jest.fn(),
     toggleCheck: jest.fn(),
-    getChecksByDate: jest.fn()
+    getChecksByDate: jest.fn(),
+    deleteCheck: jest.fn()
   };
 });
 
@@ -184,6 +185,45 @@ describe('CheckController', () => {
       
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith(mockResponse);
+    });
+  });
+
+  describe('deleteCheck', () => {
+    it('should delete a check successfully', async () => {
+      req.params = {
+        id: 'check1'
+      };
+      
+      const mockResponse = {
+        status: 'success',
+        message: 'Check deleted successfully'
+      };
+      
+      // Mock controller method
+      checkController.deleteCheck.mockImplementation((req, res) => {
+        res.status(200).json(mockResponse);
+      });
+      
+      await checkController.deleteCheck(req, res, next);
+      
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith(mockResponse);
+    });
+    
+    it('should return 404 if check not found', async () => {
+      req.params = {
+        id: 'nonexistent'
+      };
+      
+      // Mock controller method
+      checkController.deleteCheck.mockImplementation((req, res, next) => {
+        next(new AppError('Check not found', 404));
+      });
+      
+      await checkController.deleteCheck(req, res, next);
+      
+      expect(next).toHaveBeenCalled();
+      expect(next.mock.calls[0][0].statusCode).toBe(404);
     });
   });
 });

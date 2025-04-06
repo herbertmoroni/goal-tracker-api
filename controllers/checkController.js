@@ -42,6 +42,20 @@ class CheckController {
       return next(error);
     }
   }
+
+  async deleteCheck(req, res, next) {
+    try {
+      const { id } = req.params;
+      await checkService.deleteCheck(req.user._id, id);
+      
+      res.status(200).json({
+        status: 'success',
+        message: 'Check deleted successfully'
+      });
+    } catch (error) {
+      return next(error);
+    }
+  }
 }
 
 module.exports = new CheckController();

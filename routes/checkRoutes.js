@@ -10,5 +10,6 @@ router.use(authenticate);
 router.get('/week', checkController.getWeekChecks);
 router.post('/:goalId/:date', validateCheck.toggleCheck, handleValidationErrors, checkController.toggleCheck);
 router.get('/date/:date', validateCheck.getByDate, handleValidationErrors, checkController.getChecksByDate);
+router.delete('/:id', validateCheck.delete, handleValidationErrors, checkController.deleteCheck);
 
 module.exports = router;

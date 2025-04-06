@@ -21,6 +21,7 @@ describe('Check Routes', () => {
     expect(routes).toContainEqual({ path: '/week', methods: ['get'] });
     expect(routes).toContainEqual({ path: '/:goalId/:date', methods: ['post'] });
     expect(routes).toContainEqual({ path: '/date/:date', methods: ['get'] });
+    expect(routes).toContainEqual({ path: '/:id', methods: ['delete'] });
   });
   
   it('should use authentication middleware at router level', () => {

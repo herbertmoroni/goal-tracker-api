@@ -706,6 +706,32 @@ const options = {
           }
         }
       },
+      '/checks/{id}': {
+          parameters: [
+            {
+              name: 'id',
+              in: 'path',
+              required: true,
+              schema: { type: 'string' },
+              description: 'Check ID'
+            }
+          ],
+          delete: {
+            summary: 'Delete a specific check by ID',
+            tags: ['Checks'],
+            responses: {
+              200: responses.success({
+                type: 'object',
+                properties: {
+                  status: { type: 'string', example: 'success' },
+                  message: { type: 'string', example: 'Check deleted successfully' }
+                }
+              }),
+              401: responses.error('Unauthorized'),
+              404: responses.error('Check not found')
+            }
+          }
+        },
       
       // Stats Routes
       '/stats/dashboard': {

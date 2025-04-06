@@ -180,6 +180,23 @@ class CheckService {
       checks: checksData
     };
   }
+
+  async deleteCheck(userId, checkId) {
+    // Find the check
+    const check = await Check.findOne({
+      _id: checkId,
+      user: userId
+    });
+    
+    if (!check) {
+      throw new AppError('Check not found', 404);
+    }
+    
+    // Delete the check
+    await Check.deleteOne({ _id: checkId });
+    
+    return true;
+  }
 }
 
 module.exports = new CheckService();
