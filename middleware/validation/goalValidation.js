@@ -9,6 +9,11 @@ const validateGoal = {
         .trim()
         .isLength({ min: 2, max: 50 })
         .withMessage('Goal name must be between 2 and 50 characters'),
+
+      body('category')
+        .optional()
+        .isMongoId()
+        .withMessage('Invalid category ID format'),
       
       body('icon')
         .optional()
@@ -41,6 +46,11 @@ const validateGoal = {
       param('id')
         .isMongoId()
         .withMessage('Invalid goal ID format'),
+        
+      body('category')
+        .optional()
+        .isMongoId()
+        .withMessage('Invalid category ID format'),
       
       body('name')
         .optional()

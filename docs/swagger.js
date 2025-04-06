@@ -156,6 +156,7 @@ const options = {
           properties: {
             id: { type: 'string', example: '60a1b2c3d4e5f6g7h8i9j0k1' },
             userId: { type: 'string', example: '5f8d0f55e3a9d93f9810c9a1' },
+            category: { type: 'string', example: '60a1b2c3d4e5f6g7h8i9j0k1', nullable: true },
             name: { type: 'string', example: 'Exercise daily' },
             iconType: { type: 'string', example: 'fitness' },
             positive: { type: 'boolean', example: true },
@@ -172,7 +173,8 @@ const options = {
             name: { type: 'string', example: 'Exercise daily' },
             iconType: { type: 'string', example: 'fitness' },
             positive: { type: 'boolean', example: true },
-            points: { type: 'number', example: 10 }
+            points: { type: 'number', example: 10 },
+            category: { type: 'string', example: '60a1b2c3d4e5f6g7h8i9j0k1', nullable: true }
           }
         },
         GoalResponse: {

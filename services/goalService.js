@@ -28,6 +28,7 @@ class GoalService {
       icon: icon || 'check-circle',
       positive: positive !== undefined ? positive : true,
       points: points || 1,
+      category: category || null,
       order,
       active: true
     });
@@ -56,6 +57,7 @@ class GoalService {
     if (updateData.positive !== undefined) updateFields.positive = updateData.positive;
     if (updateData.points !== undefined) updateFields.points = updateData.points;
     if (updateData.active !== undefined) updateFields.active = updateData.active;
+    if (updateData.category !== undefined) updateFields.category = updateData.category;
     
     // Find and update the goal
     const goal = await Goal.findOneAndUpdate(
