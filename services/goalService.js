@@ -12,7 +12,7 @@ class GoalService {
   }
 
   async createGoal(userId, goalData) {
-    const { name, icon, positive, points } = goalData;
+    const { name, icon, positive, points, category } = goalData;
     
     // Get highest order number to place new goal at the end
     const lastGoal = await Goal.findOne({ 
@@ -28,9 +28,9 @@ class GoalService {
       icon: icon || 'check-circle',
       positive: positive !== undefined ? positive : true,
       points: points || 1,
-      category: category || null,
       order,
-      active: true
+      active: true,
+      category: category || null,
     });
     
     return goal;
